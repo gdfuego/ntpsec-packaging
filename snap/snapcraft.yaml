@@ -1,0 +1,46 @@
+name: ntpsec
+version: '0.5'
+summary: The NTP reference implementation, refactored
+description: |
+  The NTP reference implementation, refactored.
+
+grade: devel 
+confinement: devmode 
+
+apps:
+  ntpd:
+    command: usr/local/sbin/ntpd -c $SNAP/ntpsec/ntp.conf -n -u 123
+    daemon: simple
+  ntpq:
+    command: usr/local/bin/ntpq
+  ntpfrob:
+    command: usr/local/bin/ntpfrob
+  ntpleapfetch:
+    command: usr/local/bin/ntpleapfetch
+  ntptime:
+    command: usr/local/bin/ntptime
+  ntpviz:
+    command: usr/local/bin/ntpviz
+  ntpdig:
+    command: usr/local/bin/ntpdig
+  ntpkeygen:
+    command: usr/local/bin/ntpkeygen
+  ntpmon:
+    command: usr/local/bin/ntpmon
+  ntpsweep:
+    command: usr/local/bin/ntpsweep
+  ntptrace:
+    command: usr/local/bin/ntptrace
+  ntpwait:
+    command: usr/local/bin/ntpwait
+
+parts:
+  ntpsec:
+    plugin: waf
+    source: https://gitlab.com/NTPsec/ntpsec.git
+    source-type: git
+    build-packages: [libcrypto++-dev, libcap-dev, python-ntplib]
+    stage-packages: [python]
+    organize:
+      ../build/contrib/ntp.conf.basic.sample: ntpsec/ntp.conf
+
