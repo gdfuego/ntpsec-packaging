@@ -1,5 +1,5 @@
 name: ntpsec
-version: '0.5'
+version: 1.0
 summary: The NTP reference implementation, refactored
 description: |
   The NTP reference implementation, refactored.
@@ -39,6 +39,8 @@ parts:
     plugin: waf
     source: https://gitlab.com/NTPsec/ntpsec.git
     source-type: git
+    configflags:
+      - --enable-leap-smear
     build-packages: [libcrypto++-dev, libcap-dev, python-ntplib]
     stage-packages: [python]
     organize:
