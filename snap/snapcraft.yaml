@@ -5,34 +5,46 @@ description: |
   The NTP reference implementation, refactored.
 
 grade: devel 
-confinement: devmode 
+confinement: strict
 
 apps:
   ntpd:
-    command: usr/local/sbin/ntpd -c $SNAP/ntpsec/ntp.conf -n -u 123
+    command: usr/local/sbin/ntpd -c $SNAP/ntp.conf -n
     daemon: simple
+    plugs: [system-trace, process-control, time-control, network, network-bind, network-observe]
   ntpq:
     command: usr/local/bin/ntpq
+    plugs: [network]
   ntpfrob:
     command: usr/local/bin/ntpfrob
+    plugs: [network]
   ntpleapfetch:
     command: usr/local/bin/ntpleapfetch
+    plugs: [network]
   ntptime:
     command: usr/local/bin/ntptime
+    plugs: [network]
   ntpviz:
     command: usr/local/bin/ntpviz
+    plugs: [network]
   ntpdig:
     command: usr/local/bin/ntpdig
+    plugs: [network]
   ntpkeygen:
     command: usr/local/bin/ntpkeygen
+    plugs: [network]
   ntpmon:
     command: usr/local/bin/ntpmon
+    plugs: [network]
   ntpsweep:
     command: usr/local/bin/ntpsweep
+    plugs: [network]
   ntptrace:
     command: usr/local/bin/ntptrace
+    plugs: [network]
   ntpwait:
     command: usr/local/bin/ntpwait
+    plugs: [network]
 
 parts:
   ntpsec:
@@ -43,6 +55,7 @@ parts:
       - --enable-leap-smear
     build-packages: [libcrypto++-dev, libcap-dev, python-ntplib]
     stage-packages: [python]
-    organize:
-      ../build/contrib/ntp.conf.basic.sample: ntpsec/ntp.conf
+    install: |
+      cat ../build/contrib/ntp.conf.basic.sample > $SNAPCRAFT_PART_INSTALL/ntp.conf
+      echo rlimit memlock -1 >> $SNAPCRAFT_PART_INSTALL/ntp.conf
 
