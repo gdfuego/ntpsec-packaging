@@ -1,17 +1,17 @@
 name: ntpsec
-version: 1.0
+version: 0.9.6
 summary: The NTP reference implementation, refactored
 description: |
   The NTP reference implementation, refactored.
 
 grade: devel 
-confinement: strict
+confinement: classic
 
 apps:
   ntpd:
-    command: usr/local/sbin/ntpd -c $SNAP/ntp.conf -n
-    daemon: simple
-    plugs: [system-trace, process-control, time-control, network, network-bind, network-observe]
+    command: usr/local/sbin/ntpd -c $SNAP/etc/ntp-conf.d/example.conf -u 123
+    daemon: forking
+    plugs: [time-control, network, network-bind]
   ntpq:
     command: usr/local/bin/ntpq
     plugs: [network]
@@ -54,8 +54,6 @@ parts:
     configflags:
       - --enable-leap-smear
     build-packages: [libcrypto++-dev, libcap-dev, python-ntplib]
-    stage-packages: [python]
-    install: |
-      cat ../build/contrib/ntp.conf.basic.sample > $SNAPCRAFT_PART_INSTALL/ntp.conf
-      echo rlimit memlock -1 >> $SNAPCRAFT_PART_INSTALL/ntp.conf
-
+    stage-packages: [python, libpython2.7]
+    organize:
+      ../build/etc/ntp-conf.d: etc/ntp-conf.d
